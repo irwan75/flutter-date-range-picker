@@ -29,7 +29,7 @@ class TextFieldBuilder extends StatelessWidget {
       this.cursorColor = ColorsUtils.colorPrimary,
       this.autoFocus = false,
       this.focusNode,
-      this.borderRadius = 10.0,
+      this.borderRadius = 8.0,
       this.hintText,
       this.inputFormatters})
       : super(key: key);

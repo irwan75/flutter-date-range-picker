@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_date_range_picker/date_picker_with_periode.dart';
 import 'package:flutter_date_range_picker/flutter_date_range_picker.dart';
 import 'package:flutter_date_range_picker/widgets/wrap_text_button.dart';
 
@@ -35,63 +36,90 @@ class SampleDatePicker extends StatefulWidget {
 class _SampleDatePickerState extends State<SampleDatePicker> {
   DateTime? startDateSelected, endDateSelected;
 
+  final LayerLink _layerLink = LayerLink();
+
+  OverlayState? overlayState;
+  OverlayEntry? overlayEntry;
+
+  _shwoOverlay(BuildContext context){
+    overlayState = Overlay.of(context);
+
+    overlayEntry = OverlayEntry(builder: (contect){
+      return Positioned(
+        width: 500,
+        height: 350,
+        child: CompositedTransformFollower(
+          link: _layerLink,
+          showWhenUnlinked: false,
+          offset: const Offset(0, 50),
+          child: Material(
+            child: DatePickerWithPeriode(
+              setDateActionCallback: ({startDate, endDate}) {
+                setState(() {
+                  startDateSelected = startDate;
+                  endDateSelected = endDate;
+                });
+              },
+            ),
+          ),
+        ),
+      );
+
+    });
+
+    overlayState!.insert(overlayEntry!);
+
+  }
+
+  void _hideOverlay() {
+    if (overlayEntry != null) {
+      overlayEntry!.remove();
+      overlayEntry = null;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Sample Date Picker")),
-      body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              WrapTextButton('Show date picker multiple view',
-                  height: 50,
-                  backgroundColor: Colors.blue,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  textStyle: const TextStyle(
+      body: InkWell(
+        onTap: _hideOverlay,
+        child: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CompositedTransformTarget(
+                  link: _layerLink,
+                  child: WrapTextButton('Show date picker multiple view',
+                      height: 50,
+                      backgroundColor: Colors.blue,
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      textStyle: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                          fontSize: 16), onTap: () {
+                            _shwoOverlay(context);
+                  }),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Start date: ${startDateSelected != null ? DateFormat('dd/MM/yyyy').format(startDateSelected!) : ''}',
+                  style: const TextStyle(
                       fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                      fontSize: 16), onTap: () {
-                showGeneralDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    barrierLabel: '',
-                    barrierColor: Colors.black54,
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      return Dialog(
-                          elevation: 0,
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0)),
-                          child: MultipleViewDateRangePicker(
-                            setDateActionCallback: ({startDate, endDate}) {
-                              setState(() {
-                                startDateSelected = startDate;
-                                endDateSelected = endDate;
-                              });
-                              Navigator.of(context).pop();
-                            },
-                          ));
-                    });
-              }),
-              const SizedBox(height: 16),
-              Text(
-                'Start date: ${startDateSelected != null ? DateFormat('dd/MM/yyyy').format(startDateSelected!) : ''}',
-                style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                    fontSize: 16),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'End date: ${endDateSelected != null ? DateFormat('dd/MM/yyyy').format(endDateSelected!) : ''}',
-                style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                    fontSize: 16),
-              )
-            ]),
+                      color: Colors.black,
+                      fontSize: 16),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'End date: ${endDateSelected != null ? DateFormat('dd/MM/yyyy').format(endDateSelected!) : ''}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                      fontSize: 16),
+                )
+              ]),
+        ),
       ),
     );
   }
