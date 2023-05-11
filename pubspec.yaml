@@ -12,12 +12,14 @@ dependencies:
 
   cupertino_icons: ^1.0.5
 
-  intl: 0.17.0
+  intl: ^0.18.0
 
   syncfusion_flutter_datepicker: ^20.2.49
 
-  pattern_formatter: 2.0.0
-
+  # pattern_formatter: 2.0.0
+  pattern_formatter:
+    git: https://github.com/irwan75/flutter_pattern_formatter.git
+  
   flutter_svg: 2.0.2
 
   debounce_throttle: 2.0.0
