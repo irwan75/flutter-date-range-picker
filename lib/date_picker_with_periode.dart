@@ -9,14 +9,20 @@ import 'package:pattern_formatter/date_formatter.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 typedef SetDateActionCallback = Function(
-    {DateTime? startDate, DateTime? endDate});
+    {DateTime? startDate, DateTime? endDate, bool? isMultipleRange});
 
 class DatePickerWithPeriode extends StatefulWidget {
   final SetDateActionCallback? setDateActionCallback;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final bool? isMultipleRange;
 
   const DatePickerWithPeriode(
       {Key? key,
-      this.setDateActionCallback})
+      this.setDateActionCallback,
+      this.startDate,
+      this.endDate,
+      this.isMultipleRange})
       : super(key: key);
 
   @override
@@ -42,7 +48,9 @@ class _DatePickerWithPeriodeState
     _datePickerController = DateRangePickerController();
     _startDateInputController = TextEditingController();
     _endDateInputController =TextEditingController();
-    _startDate = DateTime.now();
+    _startDate = widget.startDate ?? DateTime.now();
+    _endDate = widget.endDate ?? DateTime.now();
+    _switchPeriode.value = widget.isMultipleRange ?? false;
     _initDebounceTimeForDate();
     _updateDateTextInput();
     super.initState();
@@ -117,6 +125,7 @@ class _DatePickerWithPeriodeState
                           ? DateRangePickerSelectionMode.range
                           : DateRangePickerSelectionMode.single,
                       initialDisplayDate: _startDate,
+                      initialSelectedDate: _startDate,
                       initialSelectedRange: PickerDateRange(_startDate, _endDate),
                       enableMultiView: value,
                       enablePastDates: true,
@@ -286,7 +295,7 @@ class _DatePickerWithPeriodeState
       _endDateInputController.clear();
     }
 
-    if(_startDate != null && _endDate != null) widget.setDateActionCallback!(startDate: _startDate, endDate: _endDate);
+    if(_startDate != null && _endDate != null) widget.setDateActionCallback!(startDate: _startDate, endDate: _endDate, isMultipleRange: _switchPeriode.value);
 
   }
 
