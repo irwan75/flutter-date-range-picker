@@ -70,7 +70,7 @@ class _DatePickerWithPeriodeState
         valueListenable: _switchPeriode,
         builder: (context, value, widget) {
           return Container(
-            width: value ? 500 : 250,
+            width: value ? 550 : 350,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -167,9 +167,9 @@ class _DatePickerWithPeriodeState
                               fontWeight: FontWeight.bold)),
                     ),
                   )),
-                  const Center(
+                  value ? const Center(
                       child:
-                          VerticalDivider(color: ColorsUtils.colorDivider, width: 1)),
+                          VerticalDivider(color: ColorsUtils.colorDivider, width: 1)) : Container(),
                 ]),
               ),
             ]),
