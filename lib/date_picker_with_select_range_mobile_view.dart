@@ -1,9 +1,7 @@
 import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_date_range_picker/utils/colors_utils.dart';
-import 'package:flutter_date_range_picker/utils/image_paths.dart';
 import 'package:flutter_date_range_picker/widgets/text_field_builder.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:pattern_formatter/date_formatter.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -102,43 +100,92 @@ class _DatePickerWithPeriodeState
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ValueListenableBuilder<String>(
-                  valueListenable: dropdownValue,
-                  builder: (context, s, w) {
-                    return DropdownButton<String>(
-                      value: s,
-                      icon: const Icon(Icons.expand_more),
-                      elevation: 16,
-                      underline: Container(
-                        color: Colors.white,
+                const SizedBox(height: 16,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        height: 35,
+                        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF8F7F7),
+                          borderRadius: BorderRadius.circular(4.0),
+                          border: Border.all(color: modes == 1 ? const Color(0xFF00529C) : const Color(0xFFE5E5E6), width: 2)
+                        ),
+                        child: InkWell(
+                          hoverColor: const Color(0xFFFF6500).withOpacity(0.2),
+                          splashColor: const Color(0xFFFF6500).withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(4.0),
+                          onTap: (){
+                            if(modes == null || modes != 1){
+                              modeView.value = 1;
+                              pickerView.value = DateRangePickerView.decade;
+                              _datePickerController.view = DateRangePickerView.decade;
+                            } else {
+                              modeView.value = null;
+                            }
+                          },
+                          child: const Center(child: Text('Tahun', style: TextStyle(fontSize: 12),)),
+                        ),
                       ),
-                      onChanged: (String? value) {
-                        dropdownValue.value = value!;
-                        if(value == list[0]){
-                          modeView.value = 1;
-                          pickerView.value = DateRangePickerView.decade;
-                          _datePickerController.view = DateRangePickerView.decade;
-
-                        }
-                        if(value == list[1]){
-                          modeView.value = 1;
-                          pickerView.value = DateRangePickerView.decade;
-                          _datePickerController.view = DateRangePickerView.decade;
-                        }
-                        if(value == list[2]){
-                          modeView.value = 3;
-                          pickerView.value = DateRangePickerView.month;
-                          _datePickerController.view = DateRangePickerView.month;
-                        }
-                      },
-                      items: list.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    );
-                  }
+                    ),
+                     Expanded(
+                      flex: 1,
+                      child: Container(
+                        height: 35,
+                        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF8F7F7),
+                          borderRadius: BorderRadius.circular(4.0),
+                          border: Border.all(color: modes == 2 ? const Color(0xFF00529C) : const Color(0xFFE5E5E6), width: 2)
+                        ),
+                        child: InkWell(
+                          hoverColor: const Color(0xFFFF6500).withOpacity(0.2),
+                          splashColor: const Color(0xFFFF6500).withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(4.0),
+                          onTap: (){
+                            if(modes == null || modes != 2){
+                              modeView.value = 2;
+                              pickerView.value = DateRangePickerView.year;
+                              _datePickerController.view = DateRangePickerView.year;
+                            } else {
+                              modeView.value = null;
+                            }
+                          },
+                          child: const Center(child: Text('Bulanan', style: TextStyle(fontSize: 12),)),
+                        ),
+                      ),
+                    ),
+                     Expanded(
+                      flex: 1,
+                      child: Container(
+                        height: 35,
+                        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF8F7F7),
+                          borderRadius: BorderRadius.circular(4.0),
+                          border: Border.all(color: modes == 3 ? const Color(0xFF00529C) : const Color(0xFFE5E5E6), width: 2)
+                        ),
+                        child: InkWell(
+                          hoverColor: const Color(0xFFFF6500).withOpacity(0.2),
+                          splashColor: const Color(0xFFFF6500).withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(4.0),
+                          onTap: (){
+                            if(modes == null || modes != 3){
+                            modeView.value = 3;
+                            pickerView.value = DateRangePickerView.month;
+                            _datePickerController.view = DateRangePickerView.month;;
+                          } else {
+                            modeView.value = null;
+                          }
+                          },
+                          child: const Center(child: Text('Custom', style: TextStyle(fontSize: 12),)),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
                 const SizedBox(height: 8,),
                 _sectionInputDate(context),
@@ -205,11 +252,11 @@ class _DatePickerWithPeriodeState
   }
 
   Widget _sectionInputDate(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-      Expanded(
-        flex: 1,
+      SizedBox(
+        width: double.infinity,
         child: TextFieldBuilder(
           key: const Key('start_date_input'),
           textController: _startDateInputController,
@@ -221,27 +268,26 @@ class _DatePickerWithPeriodeState
           inputFormatters: [
             DateInputFormatter(),
           ],
+          borderRadius: 4,
         ),
       ),
-      const SizedBox(width: 12),
-      SvgPicture.asset(ImagePaths.icDateRange,
-          package: ImagePaths.packageName),
-      const SizedBox(width: 12),
-      Expanded(
-        flex: 1,
+      const SizedBox(height: 12),
+      SizedBox(
+        width: double.infinity,
         child: TextFieldBuilder(
-          key: const Key('end_date_input'),
-          textController: _endDateInputController,
-          onTextChange: (value) {
-            _denounceEndDate.value = value;
-          },
-          hintText: 'dd/mm/yyyy',
-          keyboardType: TextInputType.number,
-          inputFormatters: [
-            DateInputFormatter(),
-          ],
-        ),
-      ),
+            key: const Key('end_date_input'),
+            textController: _endDateInputController,
+            onTextChange: (value) {
+              _denounceEndDate.value = value;
+            },
+            hintText: 'dd/mm/yyyy',
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              DateInputFormatter(),
+            ],
+            borderRadius: 4,
+          ),
+      )
     ]);
   }
 
