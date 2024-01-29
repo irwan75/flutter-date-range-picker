@@ -41,10 +41,10 @@ class _SampleDatePickerState extends State<SampleDatePicker> {
   OverlayState? overlayState;
   OverlayEntry? overlayEntry;
 
-  _shwoOverlay(BuildContext context){
+  _shwoOverlay(BuildContext context) {
     overlayState = Overlay.of(context);
 
-    overlayEntry = OverlayEntry(builder: (contect){
+    overlayEntry = OverlayEntry(builder: (contect) {
       return Positioned(
         width: 500,
         height: 350,
@@ -54,7 +54,7 @@ class _SampleDatePickerState extends State<SampleDatePicker> {
           offset: const Offset(0, 50),
           child: Material(
             child: DatePickerWithPeriode(
-              setDateActionCallback: ({startDate, endDate, isMultipleRange}) {
+              setDateActionCallback: (startDate, endDate, isMultipleRange) {
                 setState(() {
                   startDateSelected = startDate;
                   endDateSelected = endDate;
@@ -62,13 +62,11 @@ class _SampleDatePickerState extends State<SampleDatePicker> {
               },
             ),
           ),
-          ),
+        ),
       );
-
     });
 
     overlayState!.insert(overlayEntry!);
-
   }
 
   void _hideOverlay() {
@@ -77,6 +75,7 @@ class _SampleDatePickerState extends State<SampleDatePicker> {
       overlayEntry = null;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,13 +92,13 @@ class _SampleDatePickerState extends State<SampleDatePicker> {
                   child: WrapTextButton('Show date picker multiple view',
                       height: 50,
                       backgroundColor: Colors.blue,
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
                       textStyle: const TextStyle(
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
                           fontSize: 16), onTap: () {
-                            _shwoOverlay(context);
+                    _shwoOverlay(context);
                   }),
                 ),
                 const SizedBox(height: 16),

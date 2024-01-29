@@ -8,14 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:pattern_formatter/date_formatter.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-typedef SetDateActionCallback = Function({
-  DateTime? startDate,
-  DateTime? endDate,
-  bool? isMultipleRange,
-});
+import 'utils/typedef_collection.dart';
 
 class DatePickerWithPeriode extends StatefulWidget {
-  final SetDateActionCallback? setDateActionCallback;
+  final SetDateActionCallbackMultipleRange? setDateActionCallback;
   final DateTime? startDate;
   final DateTime? endDate;
   final bool? isMultipleRange;
@@ -127,67 +123,73 @@ class _DatePickerWithPeriodeState extends State<DatePickerWithPeriode> {
                 child: _sectionInputDate(context),
               ),
               Expanded(
-                child: Stack(children: [
-                  Positioned.fill(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
                       child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SfDateRangePicker(
-                      controller: _datePickerController,
-                      onSelectionChanged: _onSelectionChanged,
-                      view: DateRangePickerView.month,
-                      selectionMode: value
-                          ? DateRangePickerSelectionMode.range
-                          : DateRangePickerSelectionMode.single,
-                      initialDisplayDate: _startDate,
-                      initialSelectedDate: _startDate,
-                      initialSelectedRange:
-                          PickerDateRange(_startDate, _endDate),
-                      enableMultiView: value,
-                      enablePastDates: true,
-                      viewSpacing: 16,
-                      headerHeight: 52,
-                      backgroundColor: Colors.white,
-                      selectionShape: DateRangePickerSelectionShape.rectangle,
-                      showNavigationArrow: true,
-                      selectionColor: ColorsUtils.colorButton,
-                      startRangeSelectionColor: ColorsUtils.colorButton,
-                      endRangeSelectionColor: ColorsUtils.colorButton,
-                      selectionRadius: 6,
-                      monthViewSettings: const DateRangePickerMonthViewSettings(
-                          dayFormat: 'EE',
-                          firstDayOfWeek: 1,
-                          viewHeaderHeight: 48,
-                          viewHeaderStyle: DateRangePickerViewHeaderStyle(
-                              backgroundColor: Colors.white,
+                        padding: const EdgeInsets.all(16.0),
+                        child: SfDateRangePicker(
+                          controller: _datePickerController,
+                          onSelectionChanged: _onSelectionChanged,
+                          view: DateRangePickerView.month,
+                          selectionMode: value
+                              ? DateRangePickerSelectionMode.range
+                              : DateRangePickerSelectionMode.single,
+                          initialDisplayDate: _startDate,
+                          initialSelectedDate: _startDate,
+                          initialSelectedRange:
+                              PickerDateRange(_startDate, _endDate),
+                          enableMultiView: value,
+                          enablePastDates: true,
+                          viewSpacing: 16,
+                          headerHeight: 52,
+                          backgroundColor: Colors.white,
+                          selectionShape:
+                              DateRangePickerSelectionShape.rectangle,
+                          showNavigationArrow: true,
+                          selectionColor: ColorsUtils.colorButton,
+                          startRangeSelectionColor: ColorsUtils.colorButton,
+                          endRangeSelectionColor: ColorsUtils.colorButton,
+                          selectionRadius: 6,
+                          monthViewSettings:
+                              const DateRangePickerMonthViewSettings(
+                                  dayFormat: 'EE',
+                                  firstDayOfWeek: 1,
+                                  viewHeaderHeight: 48,
+                                  viewHeaderStyle:
+                                      DateRangePickerViewHeaderStyle(
+                                          backgroundColor: Colors.white,
+                                          textStyle: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12))),
+                          monthCellStyle: DateRangePickerMonthCellStyle(
+                            cellDecoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(6)),
+                            todayTextStyle: const TextStyle(
+                                color: ColorsUtils.colorButton,
+                                fontWeight: FontWeight.bold),
+                            disabledDatesTextStyle: const TextStyle(
+                                color: ColorsUtils.colorButton,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          headerStyle: const DateRangePickerHeaderStyle(
+                              textAlign: TextAlign.center,
                               textStyle: TextStyle(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12))),
-                      monthCellStyle: DateRangePickerMonthCellStyle(
-                        cellDecoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(6)),
-                        todayTextStyle: const TextStyle(
-                            color: ColorsUtils.colorButton,
-                            fontWeight: FontWeight.bold),
-                        disabledDatesTextStyle: const TextStyle(
-                            color: ColorsUtils.colorButton,
-                            fontWeight: FontWeight.bold),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold)),
+                        ),
                       ),
-                      headerStyle: const DateRangePickerHeaderStyle(
-                          textAlign: TextAlign.center,
-                          textStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold)),
                     ),
-                  )),
-                  value
-                      ? const Center(
-                          child: VerticalDivider(
-                              color: ColorsUtils.colorDivider, width: 1))
-                      : Container(),
-                ]),
+                    value
+                        ? const Center(
+                            child: VerticalDivider(
+                                color: ColorsUtils.colorDivider, width: 1))
+                        : const SizedBox(),
+                  ],
+                ),
               ),
             ],
           ),
@@ -312,10 +314,7 @@ class _DatePickerWithPeriodeState extends State<DatePickerWithPeriode> {
     }
 
     if (_startDate != null && _endDate != null) {
-      widget.setDateActionCallback!(
-          startDate: _startDate,
-          endDate: _endDate,
-          isMultipleRange: _switchPeriode.value);
+      widget.setDateActionCallback!(_startDate, _endDate, _switchPeriode.value);
     }
   }
 

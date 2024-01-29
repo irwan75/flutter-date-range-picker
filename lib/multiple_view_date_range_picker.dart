@@ -10,8 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:pattern_formatter/date_formatter.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-typedef SetDateActionCallback = Function(
-    {DateTime? startDate, DateTime? endDate});
+import 'utils/typedef_collection.dart';
 
 class MultipleViewDateRangePicker extends StatefulWidget {
   final String cancelText;
@@ -128,7 +127,8 @@ class _MultipleViewDateRangePickerState
         const Divider(color: ColorsUtils.colorDivider, height: 1),
         Expanded(
           child: Stack(children: [
-            Positioned.fill(child: Padding(
+            Positioned.fill(
+                child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: SfDateRangePicker(
                 controller: _datePickerController,
@@ -177,7 +177,9 @@ class _MultipleViewDateRangePickerState
                         fontWeight: FontWeight.bold)),
               ),
             )),
-            const Center(child: VerticalDivider(color: ColorsUtils.colorDivider, width: 1)),
+            const Center(
+                child:
+                    VerticalDivider(color: ColorsUtils.colorDivider, width: 1)),
           ]),
         ),
         const Divider(color: ColorsUtils.colorDivider, height: 1),
@@ -253,8 +255,8 @@ class _MultipleViewDateRangePickerState
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
                 radius: 10,
                 backgroundColor: ColorsUtils.colorButton,
-                onTap: () => widget.setDateActionCallback
-                    ?.call(startDate: _startDate, endDate: _endDate),
+                onTap: () =>
+                    widget.setDateActionCallback?.call(_startDate, _endDate),
               ),
             ),
           ])
@@ -312,8 +314,7 @@ class _MultipleViewDateRangePickerState
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
           radius: 10,
           backgroundColor: ColorsUtils.colorButton,
-          onTap: () => widget.setDateActionCallback
-              ?.call(startDate: _startDate, endDate: _endDate),
+          onTap: () => widget.setDateActionCallback?.call(_startDate, _endDate),
         )
       ]);
     }
