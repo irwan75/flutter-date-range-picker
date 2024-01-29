@@ -8,24 +8,33 @@ import 'package:intl/intl.dart';
 import 'package:pattern_formatter/date_formatter.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-typedef SetDateActionCallback = Function(
-    {DateTime? startDate, DateTime? endDate});
+typedef SetDateActionCallback = Function({
+  DateTime? startDate,
+  DateTime? endDate,
+  bool? isMultipleRange,
+});
 
 class DatePickerWithPeriode extends StatefulWidget {
   final SetDateActionCallback? setDateActionCallback;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final bool? isMultipleRange;
+  final bool isShowSwithPeriode;
 
-  const DatePickerWithPeriode(
-      {Key? key,
-      this.setDateActionCallback})
-      : super(key: key);
+  const DatePickerWithPeriode({
+    Key? key,
+    this.setDateActionCallback,
+    this.startDate,
+    this.endDate,
+    this.isMultipleRange,
+    this.isShowSwithPeriode = true,
+  }) : super(key: key);
 
   @override
-  State<DatePickerWithPeriode> createState() =>
-      _DatePickerWithPeriodeState();
+  State<DatePickerWithPeriode> createState() => _DatePickerWithPeriodeState();
 }
 
-class _DatePickerWithPeriodeState
-    extends State<DatePickerWithPeriode> {
+class _DatePickerWithPeriodeState extends State<DatePickerWithPeriode> {
   final String dateTimePattern = 'dd/MM/yyyy';
 
   late DateRangePickerController _datePickerController;
@@ -41,16 +50,20 @@ class _DatePickerWithPeriodeState
   void initState() {
     _datePickerController = DateRangePickerController();
     _startDateInputController = TextEditingController();
-    _endDateInputController =TextEditingController();
-    _startDate = DateTime.now();
+    _endDateInputController = TextEditingController();
+    _startDate = widget.startDate ?? DateTime.now();
+    _endDate = widget.endDate ?? DateTime.now();
+    _switchPeriode.value = widget.isMultipleRange ?? false;
     _initDebounceTimeForDate();
     _updateDateTextInput();
     super.initState();
   }
 
   void _initDebounceTimeForDate() {
-    _denounceStartDate = Debouncer<String>(const Duration(milliseconds: 300), initialValue: '');
-    _denounceEndDate = Debouncer<String>(const Duration(milliseconds: 300), initialValue: '');
+    _denounceStartDate =
+        Debouncer<String>(const Duration(milliseconds: 300), initialValue: '');
+    _denounceEndDate =
+        Debouncer<String>(const Duration(milliseconds: 300), initialValue: '');
 
     _denounceStartDate.values.listen((value) => _onStartDateTextChanged(value));
     _denounceEndDate.values.listen((value) => _onEndDateTextChanged(value));
@@ -59,35 +72,40 @@ class _DatePickerWithPeriodeState
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-        valueListenable: _switchPeriode,
-        builder: (context, value, widget) {
-          return Container(
-            width: value ? 500 : 250,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: const [
-                  BoxShadow(
-                      color: ColorsUtils.colorShadow,
-                      spreadRadius: 32,
-                      blurRadius: 32,
-                      offset: Offset.zero),
-                  BoxShadow(
-                      color: ColorsUtils.colorShadow,
-                      spreadRadius: 12,
-                      blurRadius: 12,
-                      offset: Offset.zero)
-                ]),
-            child: Column(children: [
-              Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      valueListenable: _switchPeriode,
+      builder: (context, value, widget) {
+        return Container(
+          width: value ? 550 : 350,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: const [
+              BoxShadow(
+                  color: ColorsUtils.colorShadow,
+                  spreadRadius: 32,
+                  blurRadius: 32,
+                  offset: Offset.zero),
+              BoxShadow(
+                  color: ColorsUtils.colorShadow,
+                  spreadRadius: 12,
+                  blurRadius: 12,
+                  offset: Offset.zero)
+            ],
+          ),
+          child: Column(
+            children: [
+              if (this.widget.isShowSwithPeriode)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   alignment: Alignment.centerLeft,
                   child: Row(
                     children: [
-                      const Text('Periode', style: TextStyle(fontWeight: FontWeight.bold),),
-                      const SizedBox(
-                        width: 10,
+                      const Text(
+                        'Periode',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
+                      const SizedBox(width: 10),
                       ValueListenableBuilder<bool>(
                         valueListenable: _switchPeriode,
                         builder: (context, state, widget) {
@@ -99,9 +117,13 @@ class _DatePickerWithPeriodeState
                         },
                       )
                     ],
-                  )),
+                  ),
+                )
+              else
+                const SizedBox(height: 16),
               Padding(
-                padding:  const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 child: _sectionInputDate(context),
               ),
               Expanded(
@@ -117,7 +139,9 @@ class _DatePickerWithPeriodeState
                           ? DateRangePickerSelectionMode.range
                           : DateRangePickerSelectionMode.single,
                       initialDisplayDate: _startDate,
-                      initialSelectedRange: PickerDateRange(_startDate, _endDate),
+                      initialSelectedDate: _startDate,
+                      initialSelectedRange:
+                          PickerDateRange(_startDate, _endDate),
                       enableMultiView: value,
                       enablePastDates: true,
                       viewSpacing: 16,
@@ -158,73 +182,76 @@ class _DatePickerWithPeriodeState
                               fontWeight: FontWeight.bold)),
                     ),
                   )),
-                  const Center(
-                      child:
-                          VerticalDivider(color: ColorsUtils.colorDivider, width: 1)),
+                  value
+                      ? const Center(
+                          child: VerticalDivider(
+                              color: ColorsUtils.colorDivider, width: 1))
+                      : Container(),
                 ]),
               ),
-            ]),
-          );
-        }
-      );
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Widget _sectionInputDate(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: _switchPeriode,
       builder: (context, value, child) {
-        return value ? Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-          Expanded(
-            flex: 1,
-            child: TextFieldBuilder(
-              key: const Key('start_date_input'),
-              textController: _startDateInputController,
-              onTextChange: (value) {
-                _denounceStartDate.value = value;
-              },
-              hintText: 'dd/mm/yyyy',
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                DateInputFormatter(),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          SvgPicture.asset(ImagePaths.icDateRange,
-              package: ImagePaths.packageName),
-          const SizedBox(width: 12),
-          Expanded(
-            flex: 1,
-            child: TextFieldBuilder(
-              key: const Key('end_date_input'),
-              textController: _endDateInputController,
-              onTextChange: (value) {
-                _denounceEndDate.value = value;
-              },
-              hintText: 'dd/mm/yyyy',
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                DateInputFormatter(),
-              ],
-            ),
-          ),
-        ]) : SizedBox(
-          width: double.infinity,
-          child: TextFieldBuilder(
-            key: const Key('start_date_input'),
-            textController: _startDateInputController,
-            onTextChange: (value) {
-              _denounceStartDate.value = value;
-            },
-            hintText: 'dd/mm/yyyy',
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              DateInputFormatter(),
-            ],
-          ),
-        );
+        return value
+            ? Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                Expanded(
+                  flex: 1,
+                  child: TextFieldBuilder(
+                    key: const Key('start_date_input'),
+                    textController: _startDateInputController,
+                    onTextChange: (value) {
+                      _denounceStartDate.value = value;
+                    },
+                    hintText: 'dd/mm/yyyy',
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      DateInputFormatter(),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                SvgPicture.asset(ImagePaths.icDateRange,
+                    package: ImagePaths.packageName),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 1,
+                  child: TextFieldBuilder(
+                    key: const Key('end_date_input'),
+                    textController: _endDateInputController,
+                    onTextChange: (value) {
+                      _denounceEndDate.value = value;
+                    },
+                    hintText: 'dd/mm/yyyy',
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      DateInputFormatter(),
+                    ],
+                  ),
+                ),
+              ])
+            : SizedBox(
+                width: double.infinity,
+                child: TextFieldBuilder(
+                  key: const Key('start_date_input'),
+                  textController: _startDateInputController,
+                  onTextChange: (value) {
+                    _denounceStartDate.value = value;
+                  },
+                  hintText: 'dd/mm/yyyy',
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    DateInputFormatter(),
+                  ],
+                ),
+              );
       },
     );
   }
@@ -238,7 +265,6 @@ class _DatePickerWithPeriodeState
       _startDate = args.value;
       _endDate = args.value;
       _updateDateTextInput();
-
     }
   }
 
@@ -257,7 +283,6 @@ class _DatePickerWithPeriodeState
       _updateDatePickerSelection();
     }
   }
-
 
   Future<void> _updateDatePickerSelection() async {
     _datePickerController.selectedRange = PickerDateRange(_startDate, _endDate);
@@ -286,8 +311,12 @@ class _DatePickerWithPeriodeState
       _endDateInputController.clear();
     }
 
-    if(_startDate != null && _endDate != null) widget.setDateActionCallback!(startDate: _startDate, endDate: _endDate);
-
+    if (_startDate != null && _endDate != null) {
+      widget.setDateActionCallback!(
+          startDate: _startDate,
+          endDate: _endDate,
+          isMultipleRange: _switchPeriode.value);
+    }
   }
 
   @override

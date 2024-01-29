@@ -54,7 +54,7 @@ class _SampleDatePickerState extends State<SampleDatePicker> {
           offset: const Offset(0, 50),
           child: Material(
             child: DatePickerWithPeriode(
-              setDateActionCallback: ({startDate, endDate}) {
+              setDateActionCallback: ({startDate, endDate, isMultipleRange}) {
                 setState(() {
                   startDateSelected = startDate;
                   endDateSelected = endDate;
@@ -62,7 +62,7 @@ class _SampleDatePickerState extends State<SampleDatePicker> {
               },
             ),
           ),
-        ),
+          ),
       );
 
     });
