@@ -112,7 +112,7 @@ class _DatePickerWithPeriodeState
                   children: [
                     Expanded(
                       flex: 1,
-                      child: BaseCardSelectedCategoryFilter(
+                      child: BaseCardSelectedCategoryFilter.mobile(
                         selectedMode: modes,
                         valueMode: 1,
                         title: 'Tahunan',
@@ -130,7 +130,7 @@ class _DatePickerWithPeriodeState
                     ),
                     Expanded(
                       flex: 1,
-                      child: BaseCardSelectedCategoryFilter(
+                      child: BaseCardSelectedCategoryFilter.mobile(
                         selectedMode: modes,
                         valueMode: 2,
                         title: 'Bulanan',
@@ -148,7 +148,7 @@ class _DatePickerWithPeriodeState
                     ),
                     Expanded(
                       flex: 1,
-                      child: BaseCardSelectedCategoryFilter(
+                      child: BaseCardSelectedCategoryFilter.mobile(
                         selectedMode: modes,
                         valueMode: 3,
                         title: 'Custom',

@@ -5,13 +5,25 @@ class BaseCardSelectedCategoryFilter extends StatelessWidget {
   final int valueMode;
   final String title;
   final VoidCallback onTap;
-  const BaseCardSelectedCategoryFilter({
+  final double fontSize;
+
+  const BaseCardSelectedCategoryFilter.mobile({
     Key? key,
     this.selectedMode,
     required this.valueMode,
     required this.title,
     required this.onTap,
-  }) : super(key: key);
+  })  : fontSize = 12,
+        super(key: key);
+
+  const BaseCardSelectedCategoryFilter.desktop({
+    Key? key,
+    this.selectedMode,
+    required this.valueMode,
+    required this.title,
+    required this.onTap,
+  })  : fontSize = 14,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +48,7 @@ class BaseCardSelectedCategoryFilter extends StatelessWidget {
         child: Center(
           child: Text(
             title,
-            style: const TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: fontSize),
           ),
         ),
       ),

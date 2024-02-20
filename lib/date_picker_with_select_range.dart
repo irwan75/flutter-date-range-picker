@@ -9,6 +9,7 @@ import 'package:pattern_formatter/date_formatter.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import 'utils/typedef_collection.dart';
+import 'widgets/base_card_selected_category_filter.dart';
 
 class DatePickerWithSelectRange extends StatefulWidget {
   final SetRangeActionCallbackMode? setDateActionCallback;
@@ -102,22 +103,14 @@ class _DatePickerWithPeriodeState extends State<DatePickerWithSelectRange> {
               children: [
                 SizedBox(
                   width: 120,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Material(
-                        color: const Color(0xFFF8F7F7),
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: modes == 1
-                                    ? const Color(0xFF00529C)
-                                    : const Color(0xFFE5E5E6),
-                                width: 2),
-                            borderRadius: BorderRadius.circular(4.0)),
-                        child: InkWell(
-                          hoverColor: const Color(0xFFFF6500).withOpacity(0.2),
-                          splashColor: const Color(0xFFFF6500).withOpacity(0.7),
-                          borderRadius: BorderRadius.circular(4.0),
+                  child: IntrinsicWidth(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        BaseCardSelectedCategoryFilter.desktop(
+                          title: 'Tahunan',
+                          selectedMode: modes,
+                          valueMode: 1,
                           onTap: () {
                             if (modes == null || modes != 1) {
                               modeView.value = 1;
@@ -128,27 +121,12 @@ class _DatePickerWithPeriodeState extends State<DatePickerWithSelectRange> {
                               modeView.value = null;
                             }
                           },
-                          child: const SizedBox(
-                            width: 100,
-                            height: 35,
-                            child: Center(child: Text('Tahun')),
-                          ),
                         ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      Material(
-                        color: const Color(0xFFF8F7F7),
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: modes == 2
-                                    ? const Color(0xFF00529C)
-                                    : const Color(0xFFE5E5E6),
-                                width: 2),
-                            borderRadius: BorderRadius.circular(4.0)),
-                        child: InkWell(
-                          hoverColor: const Color(0xFFFF6500).withOpacity(0.2),
-                          splashColor: const Color(0xFFFF6500).withOpacity(0.7),
-                          borderRadius: BorderRadius.circular(4.0),
+                        const SizedBox(height: 20.0),
+                        BaseCardSelectedCategoryFilter.desktop(
+                          title: 'Bulanan',
+                          selectedMode: modes,
+                          valueMode: 2,
                           onTap: () {
                             if (modes == null || modes != 2) {
                               modeView.value = 2;
@@ -159,27 +137,12 @@ class _DatePickerWithPeriodeState extends State<DatePickerWithSelectRange> {
                               modeView.value = null;
                             }
                           },
-                          child: const SizedBox(
-                            width: 100,
-                            height: 35,
-                            child: Center(child: Text('Bulan')),
-                          ),
                         ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      Material(
-                        color: const Color(0xFFF8F7F7),
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: modes == 3
-                                    ? const Color(0xFF00529C)
-                                    : const Color(0xFFE5E5E6),
-                                width: 2),
-                            borderRadius: BorderRadius.circular(4.0)),
-                        child: InkWell(
-                          hoverColor: const Color(0xFFFF6500).withOpacity(0.2),
-                          splashColor: const Color(0xFFFF6500).withOpacity(0.7),
-                          borderRadius: BorderRadius.circular(4.0),
+                        const SizedBox(height: 20.0),
+                        BaseCardSelectedCategoryFilter.desktop(
+                          title: 'Custom',
+                          selectedMode: modes,
+                          valueMode: 3,
                           onTap: () {
                             if (modes == null || modes != 3) {
                               modeView.value = 3;
@@ -190,14 +153,9 @@ class _DatePickerWithPeriodeState extends State<DatePickerWithSelectRange> {
                               modeView.value = null;
                             }
                           },
-                          child: const SizedBox(
-                            width: 100,
-                            height: 35,
-                            child: Center(child: Text('Custom')),
-                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
