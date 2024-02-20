@@ -14,7 +14,11 @@ dependencies:
 
   intl: ^0.18.0
 
-  syncfusion_flutter_datepicker: ^20.2.49
+  # syncfusion_flutter_datepicker: ^20.2.49
+
+  syncfusion_flutter_datepicker:
+    git: https://github.com/irwan75/syncfusion_flutter_datepicker.git
+  #   path: ../syncfusion-flutter-datepicker
 
   # pattern_formatter: 2.0.0
   pattern_formatter:

@@ -218,7 +218,7 @@ class _DatePickerWithPeriodeState
                         textAlign: TextAlign.center,
                         textStyle: TextStyle(
                           color: Colors.black,
-                          fontSize: 15,
+                          fontSize: 13.5,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
